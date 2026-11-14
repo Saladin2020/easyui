@@ -1,6 +1,27 @@
+<!-- easy-suite:header:start -->
 <p align="center">
-  <img src="docs/assets/icon-512.png" width="120" alt="Easy UI icon" />
+  <a href="#easy-suite"><img src="docs/brand/banner-ui.png" width="100%" alt="Easy UI: Nine-slice pixel UI kit with Thai text" /></a>
 </p>
+
+<p align="center">
+  <b>Easy UI</b> · ชุด UI พิกเซล ฟอนต์ไทย · Nine-slice pixel UI kit with Thai text<br />
+  <sub>Part of <a href="#easy-suite"><b>Easy Suite</b></a>: Thai-friendly pixel-art game dev tools for Godot 4.3+ and PixiJS v8</sub>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Saladin2020/easyui/actions/workflows/ci.yml"><img src="https://github.com/Saladin2020/easyui/actions/workflows/ci.yml/badge.svg" alt="CI" /></a> <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2e2014?style=flat-square" alt="MIT license" /></a> <img src="https://img.shields.io/badge/Godot-4.3%2B-478cbf?style=flat-square&logo=godotengine&logoColor=white" alt="Godot 4.3+" /> <a href="#export"><img src="https://img.shields.io/badge/PixiJS-v8-e72264?style=flat-square" alt="PixiJS v8" /></a> <a href="docs/MCP.md"><img src="https://img.shields.io/badge/MCP-server-c45c26?style=flat-square" alt="MCP server" /></a> <img src="https://img.shields.io/badge/Thai-ready-f4ae3d?style=flat-square" alt="Thai-ready" />
+</p>
+
+<p align="center">
+  <a href="https://github.com/Saladin2020/easysprite"><img src="docs/brand/logo-sprite-96.png" width="32" alt="Easy Sprite" title="Easy Sprite" /></a>
+  <a href="https://github.com/Saladin2020/easyscene"><img src="docs/brand/logo-scene-96.png" width="32" alt="Easy Scene" title="Easy Scene" /></a>
+  <a href="https://github.com/Saladin2020/easydialogue"><img src="docs/brand/logo-dialogue-96.png" width="32" alt="Easy Dialogue" title="Easy Dialogue" /></a>
+  <a href="https://github.com/Saladin2020/easytilemap"><img src="docs/brand/logo-tilemap-96.png" width="32" alt="Easy Tilemap" title="Easy Tilemap" /></a>
+  <a href="https://github.com/Saladin2020/easyquest"><img src="docs/brand/logo-quest-96.png" width="32" alt="Easy Quest" title="Easy Quest" /></a>
+  <a href="https://github.com/Saladin2020/easysfx"><img src="docs/brand/logo-sfx-96.png" width="32" alt="Easy SFX" title="Easy SFX" /></a>
+  <a href="https://github.com/Saladin2020/easyui"><img src="docs/brand/logo-ui-96.png" width="40" alt="Easy UI" title="Easy UI (this repo)" /></a>
+</p>
+<!-- easy-suite:header:end -->
 
 # Easy UI
 
@@ -13,10 +34,7 @@ with bundled Kanit. A sibling of [Easy Sprite](https://github.com/Saladin2020/ea
 [Easy Scene](https://github.com/Saladin2020/easyscene), [Easy Dialogue](https://github.com/Saladin2020/easydialogue)
 and [Easy SFX](https://github.com/Saladin2020/easysfx).
 
-[![license](https://img.shields.io/badge/license-MIT-2e2014?style=flat-square)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D20-3f7d52?style=flat-square)](https://nodejs.org)
-[![export](https://img.shields.io/badge/export-Godot%204.3%2B%20%7C%20PixiJS%20v8%20%7C%20PNG-f4ae3d?style=flat-square)](#export)
-[![mcp](https://img.shields.io/badge/MCP-7%20tools-c45c26?style=flat-square)](docs/MCP.md)
 
 > Easy UI **draws · lays out · exports**. Every frame and icon is generated from code (CC0), no image
 > generation and no paid APIs; the CLI renders, the web editor, the Godot scenes and the Pixi helper all use
@@ -179,6 +197,32 @@ xvfb-run -a godot --path exports/village-godot --script res://screenshot.gd   # 
 ```
 
 Ports: API / editor 8838 · MCP HTTP 8839 · Vite 5179.
+
+<!-- easy-suite:table:start -->
+## Easy Suite
+
+<img src="docs/brand/logo-suite-96.png" width="48" align="right" alt="Easy Suite" />
+
+Seven small, local-first tools that share one look (teak, lantern gold, Kanit, 16/48px pixels), one
+workflow (CLI · web editor · MCP server) and the same targets (**Godot 4.3+** and **PixiJS v8**).
+ชุดเครื่องมือทำเกมพิกเซลสไตล์ไทย ใช้ร่วมกันได้ทั้งชุด
+
+| | Tool | What it does | Repo |
+|:-:|---|---|---|
+| <img src="docs/brand/logo-sprite-96.png" width="40" alt="" /> | [**Easy Sprite**](https://github.com/Saladin2020/easysprite) | Compose modular 48px chibi characters (top-down + side-view) and export sheets. | [`easysprite`](https://github.com/Saladin2020/easysprite) |
+| <img src="docs/brand/logo-scene-96.png" width="40" alt="" /> | [**Easy Scene**](https://github.com/Saladin2020/easyscene) | Side-view levels: parallax layers, 16px autotiles, Thai town props. | [`easyscene`](https://github.com/Saladin2020/easyscene) |
+| <img src="docs/brand/logo-dialogue-96.png" width="40" alt="" /> | [**Easy Dialogue**](https://github.com/Saladin2020/easydialogue) | Branching `.ezd` dialogue with Thai-safe text, portraits and choices. | [`easydialogue`](https://github.com/Saladin2020/easydialogue) |
+| <img src="docs/brand/logo-tilemap-96.png" width="40" alt="" /> | [**Easy Tilemap**](https://github.com/Saladin2020/easytilemap) | Top-down 16px maps: blob-47 autotiles, objects, collision, spawns. | [`easytilemap`](https://github.com/Saladin2020/easytilemap) |
+| <img src="docs/brand/logo-quest-96.png" width="40" alt="" /> | [**Easy Quest**](https://github.com/Saladin2020/easyquest) | Text `.ezq` quests: steps, flags, items, rewards, linked to dialogue. | [`easyquest`](https://github.com/Saladin2020/easyquest) |
+| <img src="docs/brand/logo-sfx-96.png" width="40" alt="" /> | [**Easy SFX**](https://github.com/Saladin2020/easysfx) | Deterministic 8-bit SFX and 4-channel chiptune loops, typing blips. | [`easysfx`](https://github.com/Saladin2020/easysfx) |
+| <img src="docs/brand/logo-ui-96.png" width="40" alt="" /> | **Easy UI** ← you are here | Nine-slice pixel UI kit: panels, bars, inventory, menus, 24 icons. | [`easyui`](https://github.com/Saladin2020/easyui) |
+
+### Works with
+
+- Uses the same four styles as **Easy Dialogue** and **Easy Quest** (teak, lantern, paper, night) and Kanit.
+- Item icons fit **Easy Quest** items and rewards; screens sit over **Easy Scene** / **Easy Tilemap** backgrounds.
+- Godot Theme `.tres` + `.tscn` screens and a PixiJS v8 atlas, like its siblings.
+<!-- easy-suite:table:end -->
 
 ## Credits
 
