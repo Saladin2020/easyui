@@ -29,7 +29,7 @@
 Describe game screens in a small JSON format — nine-slice panels, buttons with every state, HP/MP bars,
 inventory grids, hotbars, menus, sliders, tabs, tooltips — render them to PNG, edit them in a web editor, and
 export a **Godot 4.3+ Theme** (StyleBoxTexture nine-slices + Kanit + ready-made `.tscn` screens) or a
-**PixiJS v8 atlas** with small component helpers. Ships 24 procedural Thai-village item icons and Thai text
+**PixiJS v8 atlas** with small component helpers. Ships 30 procedural village item icons (Thai village + a Ramadan / Hari Raya set) and Thai text
 with bundled Kanit. A sibling of [Easy Sprite](https://github.com/Saladin2020/easysprite),
 [Easy Scene](https://github.com/Saladin2020/easyscene), [Easy Dialogue](https://github.com/Saladin2020/easydialogue)
 and [Easy SFX](https://github.com/Saladin2020/easysfx).
@@ -50,10 +50,21 @@ and [Easy SFX](https://github.com/Saladin2020/easysfx).
 
 | Frames | Widgets | Icons | Export |
 | --- | --- | --- | --- |
-| 4 styles — **teak** ไม้สัก, **lantern** โคมแดง, **paper** กระดาษสา, **night** ตลาดกลางคืน — 25 parts each: panels, plate, buttons (normal / hover / pressed / disabled / focus), slots, bars, slider, checkbox, tabs, hand + arrow cursors, key badge | `panel label button menu bar inventory hotbar icon toggle slider tabs tooltip cursor image`; Thai word-wrap (Intl.Segmenter), focus hand cursor | 24 × 16 px: rice bowl, sticky-rice basket, mango, banana, coconut, fish, chili, lotus, Thai tea, lantern, garland, candle, bell, umbrella, map, scroll, letter, key, baht coin… (th + en names) | Godot 4.3+ project (Theme `.tres` per style, type variations, Kanit, one `.tscn` per screen, focus script), PixiJS v8 Spritesheet atlas + `easyui-pixi.js` + demo, PNG renders / sheets, JSON |
+| 5 styles — **teak** ไม้สัก, **lantern** โคมแดง, **paper** กระดาษสา, **night** ตลาดกลางคืน, **raya** รายอ (green and gold with 8-point star corners) — 25 parts each: panels, plate, buttons (normal / hover / pressed / disabled / focus), slots, bars, slider, checkbox, tabs, hand + arrow cursors, key badge | `panel label button menu bar inventory hotbar icon toggle slider tabs tooltip cursor image`; Thai word-wrap (Intl.Segmenter), focus hand cursor | 30 × 16 px: rice bowl, sticky-rice basket, mango, banana, coconut, fish, chili, lotus, Thai tea, lantern, garland, candle, bell, umbrella, map, scroll, letter, key, baht coin…, plus crescent and star, halal plate, ketupat (ตูปะ), pelita lamp, mosque and prayer mat (th + en names) | Godot 4.3+ project (Theme `.tres` per style, type variations, Kanit, one `.tscn` per screen, focus script), PixiJS v8 Spritesheet atlas + `easyui-pixi.js` + demo, PNG renders / sheets, JSON |
 
-The demo doc `village` has six screens over Easy Dialogue's village backgrounds: **title**, **hud**, **pause**
-(lantern), **settings** (paper), **inventory** and a **shop** (night).
+The demo doc `village` has seven screens over Easy Dialogue's village backgrounds: **title**, **hud**, **pause**
+(lantern), **settings** (paper), **inventory**, a **shop** (night) and **raya** (raya style).
+
+**Multicultural village · หมู่บ้านพหุวัฒนธรรม**: the samples share one southern Thai town where Buddhist,
+Muslim and Chinese-Thai neighbours live side by side. The `raya` screen is a Hari Raya (รายอ) preparation bag
+over Easy Scene's kampung mosque street. It holds ketupat (ตูปะ) to share with neighbours of every faith, pelita
+lamps, a prayer mat, a halal plate and the crescent and star. The `raya` style is deep green and gold, with
+8-point star (khatim / girih) corners and a dotted band. The icons use no Arabic script or sacred text, and the
+halal plate is a generic crescent sign, not an official certification mark.
+
+<p align="center">
+  <img src="docs/assets/screen-raya.png" width="660" alt="Raya screen: green and gold panel, ketupat, pelita, prayer mat, halal and mosque icons, share button" />
+</p>
 
 <p align="center">
   <img src="docs/assets/screen-title.png" width="440" alt="Title screen with menu" />
@@ -63,7 +74,7 @@ The demo doc `village` has six screens over Easy Dialogue's village backgrounds:
 </p>
 
 <p align="center">
-  <img src="docs/assets/icons.png" width="900" alt="The 24 item icons with Thai and English names" />
+  <img src="docs/assets/icons.png" width="900" alt="The 30 item icons with Thai and English names" />
 </p>
 
 ## Quick start
@@ -130,13 +141,14 @@ Coordinates are viewport pixels; label `y` is the text baseline. Full reference:
   <img src="docs/assets/styles-pause-lantern.png" width="216" alt="lantern" />
   <img src="docs/assets/styles-pause-paper.png" width="216" alt="paper" />
   <img src="docs/assets/styles-pause-night.png" width="216" alt="night" />
+  <img src="docs/assets/styles-pause-raya.png" width="216" alt="raya" />
 </p>
 
 ## Export
 
 | Preset | Output (`exports/<doc>-<preset>/`) |
 | --- | --- |
-| `godot` | Godot 4.3+ project: `easyui/themes/{teak,lantern,paper,night}.tres`, `easyui/textures/<style>/*.png`, `easyui/icons/*.png`, Kanit fonts, `easyui/easyui_screen.gd` (focus + hand cursor + demo nav) and `easyui_slot.gd`, `scenes/<screen>.tscn`, `project.godot` (480×270 viewport, 1440×810 window, `canvas_items` stretch, nearest filter, custom theme + cursor), `test_ui.gd`, `screenshot.gd` |
+| `godot` | Godot 4.3+ project: `easyui/themes/{teak,lantern,paper,night,raya}.tres`, `easyui/textures/<style>/*.png`, `easyui/icons/*.png`, Kanit fonts, `easyui/easyui_screen.gd` (focus + hand cursor + demo nav) and `easyui_slot.gd`, `scenes/<screen>.tscn`, `project.godot` (480×270 viewport, 1440×810 window, `canvas_items` stretch, nearest filter, custom theme + cursor), `test_ui.gd`, `screenshot.gd` |
 | `pixi` | `easyui.atlas.png` + `easyui.atlas.json` (PixiJS Spritesheet format; `meta.easyui` has nine-slice margins, colours, icon names), `easyui-pixi.js`, fonts, the doc, backgrounds and a demo `index.html` |
 | `png` | `screens/*.png`, `icons.png`, `styles.png`, loose `icons/` and `parts/<style>/` PNGs |
 | `json` | the doc |
@@ -205,7 +217,9 @@ Ports: API / editor 8838 · MCP HTTP 8839 · Vite 5179.
 
 Seven small, local-first tools that share one look (teak, lantern gold, Kanit, 16/48px pixels), one
 workflow (CLI · web editor · MCP server) and the same targets (**Godot 4.3+** and **PixiJS v8**).
-ชุดเครื่องมือทำเกมพิกเซลสไตล์ไทย ใช้ร่วมกันได้ทั้งชุด
+ชุดเครื่องมือทำเกมพิกเซลสไตล์ไทย ใช้ร่วมกันได้ทั้งชุด  
+The samples share one multicultural southern Thai village: Buddhist temple, wooden kampung mosque and
+Chinese-Thai shrine on the same street. หมู่บ้านพหุวัฒนธรรม วัด มัสยิด ศาลเจ้า อยู่ร่วมกันในเมืองเดียว
 
 | | Tool | What it does | Repo |
 |:-:|---|---|---|
@@ -215,11 +229,11 @@ workflow (CLI · web editor · MCP server) and the same targets (**Godot 4.3+** 
 | <img src="docs/brand/logo-tilemap-96.png" width="40" alt="" /> | [**Easy Tilemap**](https://github.com/Saladin2020/easytilemap) | Top-down 16px maps: blob-47 autotiles, objects, collision, spawns. | [`easytilemap`](https://github.com/Saladin2020/easytilemap) |
 | <img src="docs/brand/logo-quest-96.png" width="40" alt="" /> | [**Easy Quest**](https://github.com/Saladin2020/easyquest) | Text `.ezq` quests: steps, flags, items, rewards, linked to dialogue. | [`easyquest`](https://github.com/Saladin2020/easyquest) |
 | <img src="docs/brand/logo-sfx-96.png" width="40" alt="" /> | [**Easy SFX**](https://github.com/Saladin2020/easysfx) | Deterministic 8-bit SFX and 4-channel chiptune loops, typing blips. | [`easysfx`](https://github.com/Saladin2020/easysfx) |
-| <img src="docs/brand/logo-ui-96.png" width="40" alt="" /> | **Easy UI** ← you are here | Nine-slice pixel UI kit: panels, bars, inventory, menus, 24 icons. | [`easyui`](https://github.com/Saladin2020/easyui) |
+| <img src="docs/brand/logo-ui-96.png" width="40" alt="" /> | **Easy UI** ← you are here | Nine-slice pixel UI kit: panels, bars, inventory, menus, 30 icons. | [`easyui`](https://github.com/Saladin2020/easyui) |
 
 ### Works with
 
-- Uses the same four styles as **Easy Dialogue** and **Easy Quest** (teak, lantern, paper, night) and Kanit.
+- Uses the same four styles as **Easy Dialogue** and **Easy Quest** (teak, lantern, paper, night) and Kanit, plus its own **raya** style.
 - Item icons fit **Easy Quest** items and rewards; screens sit over **Easy Scene** / **Easy Tilemap** backgrounds.
 - Godot Theme `.tres` + `.tscn` screens and a PixiJS v8 atlas, like its siblings.
 <!-- easy-suite:table:end -->

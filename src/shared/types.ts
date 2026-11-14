@@ -1,7 +1,7 @@
 /** Easy UI shared types — the `easyui/1` screen format. Pure data, usable in Node and the browser. */
 
 export const FORMAT = "easyui/1";
-export const STYLES = ["teak", "lantern", "paper", "night"] as const;
+export const STYLES = ["teak", "lantern", "paper", "night", "raya"] as const;
 export type UiStyle = (typeof STYLES)[number];
 
 export const BUTTON_STATES = ["normal", "hover", "pressed", "disabled", "focus"] as const;

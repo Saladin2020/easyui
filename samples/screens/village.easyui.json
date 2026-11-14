@@ -101,6 +101,25 @@
         { "id": "wallet", "type": "bar", "x": 106, "y": 180, "w": 248, "h": 10, "kind": "stamina", "value": 1250, "max": 2000, "label": "เงิน", "showText": true },
         { "id": "leave", "type": "button", "x": 190, "y": 202, "w": 100, "text": "ออกจากร้าน" }
       ]
+    },
+    "raya": {
+      "title": "Hari Raya",
+      "style": "raya",
+      "dim": 0.35,
+      "background": "backgrounds/kampung_mosque.png",
+      "widgets": [
+        { "id": "frame", "type": "panel", "x": 36, "y": 28, "w": 408, "h": 214, "title": "เตรียมรายอ" },
+        { "id": "moon", "type": "icon", "x": 404, "y": 36, "icon": "crescent_star" },
+        { "id": "tabs", "type": "tabs", "x": 52, "y": 44, "w": 168, "tabs": ["ของรายอ", "อาหาร", "ของฝาก"], "selected": 0 },
+        { "id": "grid", "type": "inventory", "x": 52, "y": 62, "cols": 7, "rows": 3, "slot": 22, "gap": 2, "selected": 0, "items": [{ "icon": "ketupat", "count": 12 }, { "icon": "pelita", "count": 8 }, { "icon": "prayer_mat" }, { "icon": "halal" }, { "icon": "mosque" }, { "icon": "crescent_star" }, { "icon": "rice_bowl", "count": 4 }, { "icon": "coconut", "count": 3 }, { "icon": "chili", "count": 6 }, { "icon": "egg", "count": 10 }, { "icon": "thai_tea", "count": 2 }, { "icon": "letter", "count": 5 }, { "icon": "package", "count": 2 }, { "icon": "fish", "count": 4 }, null, null, null, null, null, null, null] },
+        { "id": "detail", "type": "tooltip", "x": 232, "y": 62, "w": 196, "title": "ตูปะ", "text": "ปลอกใบมะพร้าวสาน ใส่ข้าวแล้วต้มให้สุก กินกับแกงในวันรายอ แบ่งให้เพื่อนบ้านทุกศาสนา", "icon": "ketupat" },
+        { "id": "share", "type": "button", "x": 232, "y": 132, "w": 196, "text": "แบ่งให้เพื่อนบ้าน", "icon": "package", "state": "focus" },
+        { "id": "light", "type": "button", "x": 232, "y": 158, "w": 94, "text": "จุดปะลิตา", "icon": "pelita" },
+        { "id": "keep", "type": "button", "x": 334, "y": 158, "w": 94, "text": "เก็บไว้" },
+        { "id": "kind", "type": "bar", "x": 52, "y": 200, "w": 120, "kind": "xp", "value": 4, "max": 5, "label": "น้ำใจ", "showText": true },
+        { "id": "note", "type": "label", "x": 424, "y": 212, "text": "สลามัตฮารีรายอ · Selamat Hari Raya", "size": 8, "align": "right", "color": "#a9cdb4" },
+        { "id": "cursor", "type": "cursor", "x": 64, "y": 74, "kind": "hand" }
+      ]
     }
   }
 }

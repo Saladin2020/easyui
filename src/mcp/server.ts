@@ -62,7 +62,7 @@ export function createEasyUiMcp(workspaceRoot: string): McpServer {
 
   server.registerTool(
     "workspace_info",
-    { title: "Workspace info", description: "Summarize the Easy UI workspace (docs, screens of the default doc, backgrounds), the 4 styles, widget types, icon names and the screen format. Call this first.", inputSchema: {} },
+    { title: "Workspace info", description: "Summarize the Easy UI workspace (docs, screens of the default doc, backgrounds), the 5 styles, widget types, icon names and the screen format. Call this first.", inputSchema: {} },
     async () => {
       const s = await workspaceSummary(root);
       return text({ name: "easyui", root: s.root, config: s.config, docs: s.docs, backgrounds: s.backgrounds, current: s.current, styles: STYLE_LABELS, widgets: WIDGET_TYPES, icons: ICON_NAMES, parts: Object.keys(PARTS), exportPresets: EXPORT_PRESETS, screenFormat: WIDGET_CHEATSHEET });

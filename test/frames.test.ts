@@ -43,8 +43,8 @@ describe("UI parts", () => {
 });
 
 describe("item icons", () => {
-  it("has 24 named 16×16 icons with Thai + English names", () => {
-    expect(ICON_NAMES).toHaveLength(24);
+  it("has 30 named 16×16 icons with Thai + English names", () => {
+    expect(ICON_NAMES).toHaveLength(30);
     for (const n of ICON_NAMES) {
       expect(ICONS[n]!.th).toMatch(/[\u0E00-\u0E7F]/);
       expect(ICONS[n]!.en.length).toBeGreaterThan(1);
@@ -65,5 +65,31 @@ describe("item icons", () => {
       for (let i = 0; i < d.length; i += 4) if (d[i + 3] === 255 && d[i] === 0 && d[i + 1] === 0 && d[i + 2] === 0) pureBlack++;
       expect(pureBlack, `${n} has #000000 pixels`).toBe(0);
     }
+  });
+});
+
+describe("multicultural village set", () => {
+  it("has the Ramadan / Hari Raya icons with Thai + English names", async () => {
+    const { ICONS, iconPixels } = await import("../src/shared/icons.js");
+    for (const n of ["crescent_star", "halal", "ketupat", "pelita", "mosque", "prayer_mat"]) {
+      expect(ICONS[n], n).toBeDefined();
+      expect(ICONS[n]!.th.length).toBeGreaterThan(0);
+      const p = iconPixels(n);
+      let opaque = 0;
+      for (let i = 3; i < p.data.length; i += 4) if (p.data[i]! > 0) opaque++;
+      expect(opaque, n).toBeGreaterThan(40);
+    }
+  });
+
+  it("ships a raya style: green and gold frames with star corners", async () => {
+    const { STYLES } = await import("../src/shared/types.js");
+    const { PALETTES, STYLE_LABELS, panelFrame } = await import("../src/shared/frames.js");
+    expect(STYLES).toContain("raya");
+    expect(STYLE_LABELS.raya).toMatch(/รายอ/);
+    const f = panelFrame("raya");
+    const gold = PALETTES.raya.ornament;
+    let golden = 0;
+    for (let i = 0; i < f.data.length; i += 4) if (f.data[i] === gold[0] && f.data[i + 1] === gold[1] && f.data[i + 2] === gold[2]) golden++;
+    expect(golden).toBeGreaterThan(20);
   });
 });

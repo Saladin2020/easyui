@@ -16,7 +16,7 @@ beforeAll(async () => {
 });
 afterAll(() => cleanup());
 
-const SCREENS = ["title", "hud", "pause", "settings", "inventory", "shop"];
+const SCREENS = ["title", "hud", "pause", "settings", "inventory", "shop", "raya"];
 
 describe("atlas", () => {
   it("packs every part ×4 styles + icons without overlap, inside a power-of-two sheet", () => {
@@ -38,7 +38,7 @@ describe("atlas", () => {
 });
 
 describe("exportUi", () => {
-  it("godot: project, 4 themes with StyleBoxTexture nine-slices, one scene per screen", async () => {
+  it("godot: project, a theme per style with StyleBoxTexture nine-slices, one scene per screen", async () => {
     const res = await exportUi(root, { doc: "village", preset: "godot" });
     const dir = res.dirs[0]!;
     const project = await readFile(path.join(dir, "project.godot"), "utf8");
@@ -89,7 +89,7 @@ describe("exportUi", () => {
     expect(res.dirs.map((d) => path.basename(d))).toEqual(["village-json", "village-png", "village-pixi", "village-godot"]);
     const png = res.dirs[1]!;
     expect((await readdir(path.join(png, "screens"))).length).toBe(SCREENS.length);
-    expect((await readdir(path.join(png, "icons"))).length).toBe(24);
+    expect((await readdir(path.join(png, "icons"))).length).toBe(30);
     expect(existsSync(path.join(png, "parts", "lantern", "button_focus.png"))).toBe(true);
     expect(JSON.parse(await readFile(path.join(res.dirs[0]!, "village.easyui.json"), "utf8")).format).toBe("easyui/1");
   });

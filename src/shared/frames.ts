@@ -59,6 +59,12 @@ export const PALETTES: Record<UiStyle, Palette> = {
     fill: hx("#0e1426", 232), ornament: hx("#ffd27a"), ornamentHi: hx("#ffffff"),
     plate: hx("#8fc7e8"), plateHi: hx("#c8ecff"), plateLo: hx("#4f86b0"),
   },
+  // Hari Raya: deep green with gold, 8-point star (girih) corners
+  raya: {
+    outline: hx("#06140d"), hi: hx("#5fbf8a"), base: hx("#1f6b48"), base2: hx("#1a5c3e"), shadow: hx("#0f3a27"), inner: hx("#d9a93d"),
+    fill: hx("#0c2419", 236), ornament: hx("#f2c14e"), ornamentHi: hx("#fff1b8"),
+    plate: hx("#f2c14e"), plateHi: hx("#fff1b8"), plateLo: hx("#b07f1f"),
+  },
 };
 
 /** Text colours per style (CSS strings) — shared by the renderer, Godot theme and Pixi helper. */
@@ -67,6 +73,7 @@ export const STYLE_COLORS: Record<UiStyle, { text: string; muted: string; title:
   lantern: { text: "#fff3e4", muted: "#f2b7a6", title: "#ffd27a", button: "#2a0d08", buttonHi: "#1a0503", disabled: "#7a4a40", accent: "#ffd27a", shadow: "#1a0705", slotCount: "#ffffff" },
   paper: { text: "#3a2819", muted: "#7a5a3a", title: "#8a3a22", button: "#fff6dc", buttonHi: "#ffffff", disabled: "#b8a283", accent: "#b9411f", shadow: "#fff6dc", slotCount: "#3a2819" },
   night: { text: "#e6efff", muted: "#9fb3d9", title: "#ffd27a", button: "#0a1630", buttonHi: "#050b1a", disabled: "#4a5677", accent: "#ffd27a", shadow: "#05070f", slotCount: "#ffffff" },
+  raya: { text: "#f3f7ec", muted: "#a9cdb4", title: "#f2c14e", button: "#0c2419", buttonHi: "#06140d", disabled: "#4f6e5c", accent: "#f2c14e", shadow: "#06140d", slotCount: "#ffffff" },
 };
 
 export const STYLE_LABELS: Record<UiStyle, string> = {
@@ -74,6 +81,7 @@ export const STYLE_LABELS: Record<UiStyle, string> = {
   lantern: "โคมแดง · red lantern",
   paper: "กระดาษสา · rice paper",
   night: "ตลาดกลางคืน · night market",
+  raya: "รายอ · Hari Raya",
 };
 
 function make(w: number, h: number): Pixels {
@@ -108,6 +116,20 @@ export function panelFrame(style: UiStyle): Pixels {
       if (dx + dy === 2) c = P.outline;
       put(p, x, y, c);
     }
+  }
+  if (style === "raya") {
+    // 8-point star (khatim) in each corner, and a dotted gold girih band along the edges
+    const star = [".o.o.", "ooooo", ".oho.", "ooooo", ".o.o."];
+    const ink: Record<string, RGBA> = { o: P.ornament, h: P.ornamentHi };
+    for (const [cx, cy] of [[1, 1], [S - 6, 1], [1, S - 6], [S - 6, S - 6]] as const)
+      star.forEach((r, y) => [...r].forEach((ch, x) => ink[ch] && put(p, cx + x, cy + y, ink[ch]!)));
+    for (let i = 8; i < S - 8; i += 2) {
+      put(p, i, 2, P.ornament);
+      put(p, i, S - 3, P.ornament);
+      put(p, 2, i, P.ornament);
+      put(p, S - 3, i, P.ornament);
+    }
+    return p;
   }
   for (const [cx, cy] of [[2, 2], [S - 4, 2], [2, S - 4], [S - 4, S - 4]] as const) {
     put(p, cx, cy, P.ornamentHi);
