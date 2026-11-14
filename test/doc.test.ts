@@ -8,7 +8,7 @@ describe("validateDoc", () => {
     expect(v.errors).toEqual([]);
     expect(v.warnings).toEqual([]);
     const s = docSummary(v.doc!);
-    expect(s.screens.map((x) => x.id)).toEqual(["title", "hud", "pause", "settings", "inventory", "shop"]);
+    expect(s.screens.map((x) => x.id)).toEqual(["title", "hud", "pause", "settings", "inventory", "shop", "raya"]);
   });
 
   it("reports errors with paths", async () => {

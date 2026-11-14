@@ -12,6 +12,8 @@
 
 * `samples/backgrounds/thai_village_street.png` and `thai_village_shops.png` come from
   [Easy Dialogue](https://github.com/Saladin2020/easydialogue) (procedural, CC0 1.0).
+* `samples/backgrounds/kampung_mosque.png` is a render of [Easy Scene](https://github.com/Saladin2020/easyscene)'s
+  `harmony_town` (Malay house and wooden mosque), procedural, CC0 1.0.
 
 ## Fonts
 

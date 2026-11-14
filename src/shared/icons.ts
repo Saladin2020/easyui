@@ -1,7 +1,8 @@
 import { hx, type Pixels, type RGBA } from "./frames.js";
 
 /**
- * 24 procedural 16×16 item icons for a Thai village game (CC0). Each icon is drawn with a few shapes, then
+ * 30 procedural 16×16 item icons for a multicultural Thai village game (CC0): Thai village items plus a
+ * Ramadan / Hari Raya set (crescent and star, halal plate, ketupat, pelita, mosque, prayer mat). Each icon is drawn with a few shapes, then
  * auto-shaded (light top edge, dark bottom edge) and outlined, so the set stays consistent.
  */
 
@@ -247,6 +248,56 @@ export const ICONS: Record<string, { th: string; en: string; draw: Draw }> = {
     g.poly([[6, 8], [9, 10], [7, 15], [2, 13]], "#d9c27a");
     g.line(4, 12, 6, 10, "#b7a050", true);
     g.line(6, 13, 7, 11, "#b7a050", true);
+  } },
+  // Muslim community / Hari Raya (no script or sacred text in any icon)
+  crescent_star: { th: "จันทร์เสี้ยวและดาว", en: "Crescent and star", draw: (g) => {
+    g.circle(7, 8, 6, "#f2c14e");
+    g.circle(9.5, 6.8, 5, "clear");
+    g.poly([[12, 3], [12.8, 5.3], [15, 5.5], [13.3, 6.9], [13.8, 9.2], [12, 7.9], [10.2, 9.2], [10.7, 6.9], [9, 5.5], [11.2, 5.3]], "#fff1b8");
+  } },
+  halal: { th: "ป้ายฮาลาล", en: "Halal plate", draw: (g) => {
+    g.rect(2, 2, 12, 12, "#1f8a5a");
+    g.rect(3, 3, 10, 10, "#2aa36c");
+    g.circle(7, 8, 4.6, "#f3f7ec");
+    g.circle(8.8, 7, 3.4, "#2aa36c");
+    for (const [x, y] of [[11, 6], [10, 7], [11, 7], [12, 7], [11, 8]] as const) g.px(x, y, "#fff1b8", true);
+  } },
+  ketupat: { th: "ตูปะ", en: "Ketupat", draw: (g) => {
+    for (let y = 0; y < 16; y++)
+      for (let x = 0; x < 16; x++) {
+        if (Math.abs(x + 0.5 - 8) + Math.abs(y + 0.5 - 9) > 6) continue;
+        const u = Math.floor((x + y) / 3);
+        const v = Math.floor((x - y + 18) / 3);
+        g.px(x, y, (u + v) % 2 ? "#4f9e3a" : "#8fd060");
+      }
+    g.line(8, 3, 9, 1, "#4f9e3a");
+    g.line(9, 3, 12, 0, "#8fd060");
+  } },
+  pelita: { th: "ตะเกียงปะลิตา", en: "Pelita lamp", draw: (g) => {
+    g.rect(6, 6, 4, 8, "#5fa04a");
+    g.rect(6, 9, 4, 1, "#3f7a32");
+    g.rect(4, 14, 8, 1, "#7a4a1e");
+    g.rect(7, 4, 2, 2, "#5e3a1c");
+    g.ellipse(8, 2.5, 1.8, 2.5, "#f4ae3d");
+    g.px(8, 2, "#fff3c4", true);
+    g.px(8, 3, "#fff3c4", true);
+  } },
+  mosque: { th: "มัสยิด", en: "Mosque", draw: (g) => {
+    g.ellipse(7.5, 9, 4, 4.5, "#1f8a5a");
+    g.rect(2, 9, 11, 6, "#f3f7ec");
+    g.rect(2, 9, 11, 1, "#d9cfa8");
+    g.rect(13, 4, 2, 11, "#f3f7ec");
+    g.ellipse(14, 4, 1.4, 1.6, "#1f8a5a");
+    g.rect(6, 11, 3, 4, "#6b4a2a");
+    g.px(7, 3, "#f2c14e", true); g.px(7, 4, "#f2c14e", true);
+  } },
+  prayer_mat: { th: "ผ้าปูละหมาด", en: "Prayer mat", draw: (g) => {
+    g.poly([[3, 2], [13, 2], [13, 14], [3, 14]], "#a8323a");
+    g.rect(4, 3, 8, 10, "#c8484e");
+    g.poly([[5, 7], [8, 4], [11, 7], [11, 12], [5, 12]], "#7a1f28");
+    g.rect(4, 13, 8, 1, "#f2c14e");
+    for (const x of [4, 6, 8, 10, 12]) g.px(x, 15, "#f2c14e");
+    g.px(8, 9, "#f2c14e", true);
   } },
 };
 

@@ -38,7 +38,7 @@ describe("MCP server", () => {
     expect(info.icons).toContain("sticky_rice");
 
     const list = body(await client.callTool({ name: "list_screens", arguments: {} }));
-    expect(list.screens).toHaveLength(6);
+    expect(list.screens).toHaveLength(7);
     const got = body(await client.callTool({ name: "get_screen", arguments: { screen: "hud" } }));
     expect(got.def.widgets.some((w: { type: string }) => w.type === "hotbar")).toBe(true);
 

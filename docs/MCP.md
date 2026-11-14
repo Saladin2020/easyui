@@ -19,7 +19,7 @@ Cursor / Claude config:
 | `get_screen` | full JSON of one screen plus the doc style and viewport |
 | `write_screen` | add/replace a screen (creates the doc if needed); refuses to save with errors (JSON path + message), returns layout warnings; `dryRun` validates only |
 | `render_screen` | PNG to `exports/renders/<doc>-<screen>.png`, returned as an image with every widget's box |
-| `list_icons` | the 24 icons (th/en) and workspace backgrounds, with the icon sheet as an image |
+| `list_icons` | the 30 icons (th/en) and workspace backgrounds, with the icon sheet as an image |
 | `export_ui` | `godot`, `pixi`, `png`, `json` or `all` |
 
 A typical loop: `workspace_info` → `write_screen` (dryRun) → fix warnings → `write_screen` → `render_screen`

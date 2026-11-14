@@ -18,7 +18,7 @@ prints errors (with JSON paths) and layout warnings.
 | --- | --- |
 | `format` | always `"easyui/1"` |
 | `name` | display name |
-| `style` | default style: `teak` ไม้สัก · `lantern` โคมแดง · `paper` กระดาษสา · `night` ตลาดกลางคืน |
+| `style` | default style: `teak` ไม้สัก · `lantern` โคมแดง · `paper` กระดาษสา · `night` ตลาดกลางคืน · `raya` รายอ |
 | `viewport` | logical resolution, 64×64 … 1920×1080 (default demo: 480×270, rendered ×3 = 1440×810) |
 | `background` | default backdrop: workspace PNG path, `#rrggbb` or `"none"` |
 | `screens` | object of screens; ids use `a-z 0-9 _ -` |
