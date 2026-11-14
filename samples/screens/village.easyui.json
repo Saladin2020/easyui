@@ -1,0 +1,106 @@
+{
+  "format": "easyui/1",
+  "name": "Lantern Village UI",
+  "style": "teak",
+  "viewport": { "width": 480, "height": 270 },
+  "background": "backgrounds/thai_village_street.png",
+  "screens": {
+    "title": {
+      "title": "Title",
+      "dim": 0.3,
+      "widgets": [
+        { "id": "logo", "type": "label", "x": 240, "y": 62, "text": "ตำนานหมู่บ้านโคมไฟ", "size": 28, "font": "title", "align": "center" },
+        { "id": "subtitle", "type": "label", "x": 240, "y": 80, "text": "LANTERN VILLAGE", "size": 9, "align": "center", "color": "#f4ae3d" },
+        { "id": "main_menu", "type": "menu", "x": 185, "y": 112, "w": 110, "items": ["เริ่มเกมใหม่", "เล่นต่อ", "ตั้งค่า", "ออกจากเกม"], "selected": 0, "itemH": 20, "gap": 4 },
+        { "id": "lantern_l", "type": "icon", "x": 120, "y": 120, "icon": "lantern", "scale": 3 },
+        { "id": "lantern_r", "type": "icon", "x": 312, "y": 120, "icon": "lantern", "scale": 3 },
+        { "id": "version", "type": "label", "x": 474, "y": 264, "text": "v0.1 · กด Enter เพื่อเลือก", "size": 7, "align": "right", "color": "#cdb492" }
+      ]
+    },
+    "hud": {
+      "title": "In-game HUD",
+      "background": "backgrounds/thai_village_shops.png",
+      "widgets": [
+        { "id": "status", "type": "panel", "x": 6, "y": 6, "w": 150, "h": 52, "small": true },
+        { "id": "portrait", "type": "icon", "x": 12, "y": 12, "icon": "lotus", "scale": 2 },
+        { "id": "hp", "type": "bar", "x": 48, "y": 12, "w": 80, "h": 10, "kind": "hp", "value": 72, "max": 100, "label": "HP", "showText": true },
+        { "id": "mp", "type": "bar", "x": 48, "y": 26, "w": 80, "h": 10, "kind": "mp", "value": 30, "max": 50, "label": "MP", "showText": true },
+        { "id": "xp", "type": "bar", "x": 48, "y": 41, "w": 80, "h": 7, "kind": "xp", "value": 340, "max": 500, "label": "XP" },
+        { "id": "money", "type": "panel", "x": 398, "y": 6, "w": 76, "h": 24, "small": true },
+        { "id": "coin_icon", "type": "icon", "x": 404, "y": 10, "icon": "coin" },
+        { "id": "coin_text", "type": "label", "x": 466, "y": 22, "text": "1,250 ฿", "size": 9, "align": "right" },
+        { "id": "quest", "type": "tooltip", "x": 330, "y": 36, "w": 144, "title": "ภารกิจ: ข้าวเหนียวมะม่วง", "text": "หามะม่วงสุก 3 ลูก ให้ป้าแดงที่ตลาด", "icon": "mango" },
+        { "id": "hotbar", "type": "hotbar", "x": 147, "y": 240, "slots": 8, "slot": 22, "selected": 1, "items": [
+          { "icon": "rice_bowl", "count": 3 }, { "icon": "mango", "count": 5 }, { "icon": "thai_tea", "count": 2 }, { "icon": "medicine" },
+          { "icon": "lantern" }, { "icon": "key" }, null, { "icon": "map" }
+        ] },
+        { "id": "hint", "type": "label", "x": 240, "y": 232, "text": "มะม่วงสุก ×5", "size": 8, "align": "center" }
+      ]
+    },
+    "pause": {
+      "title": "Pause",
+      "style": "lantern",
+      "dim": 0.55,
+      "widgets": [
+        { "id": "pause_menu", "type": "menu", "x": 185, "y": 82, "w": 110, "title": "หยุดชั่วคราว", "items": ["เล่นต่อ", "กระเป๋า", "ตั้งค่า", "บันทึกเกม", "กลับหน้าหลัก"], "selected": 1, "disabled": [3] },
+        { "id": "tip", "type": "label", "x": 240, "y": 250, "text": "เคล็ดลับ: ตลาดกลางคืนเปิดหลังพระอาทิตย์ตก", "size": 8, "align": "center", "color": "#ffd27a" }
+      ]
+    },
+    "settings": {
+      "title": "Settings",
+      "style": "paper",
+      "dim": 0.5,
+      "widgets": [
+        { "id": "frame", "type": "panel", "x": 110, "y": 34, "w": 260, "h": 206, "title": "ตั้งค่า" },
+        { "id": "tabs", "type": "tabs", "x": 126, "y": 50, "w": 228, "tabs": ["เสียง", "ภาพ", "ปุ่มกด"], "selected": 0 },
+        { "id": "music", "type": "slider", "x": 140, "y": 76, "w": 200, "text": "เพลง", "value": 0.7 },
+        { "id": "sfx", "type": "slider", "x": 140, "y": 96, "w": 200, "text": "เสียงประกอบ", "value": 0.85 },
+        { "id": "voice", "type": "slider", "x": 140, "y": 116, "w": 200, "text": "เสียงพูด", "value": 0.45, "focus": true },
+        { "id": "fullscreen", "type": "toggle", "x": 140, "y": 140, "text": "เต็มหน้าจอ", "on": true },
+        { "id": "bigtext", "type": "toggle", "x": 140, "y": 158, "text": "ตัวอักษรขนาดใหญ่", "on": false },
+        { "id": "ok", "type": "button", "x": 150, "y": 204, "w": 80, "text": "ตกลง", "state": "hover" },
+        { "id": "cancel", "type": "button", "x": 250, "y": 204, "w": 80, "text": "ยกเลิก" }
+      ]
+    },
+    "inventory": {
+      "title": "Inventory",
+      "dim": 0.45,
+      "widgets": [
+        { "id": "frame", "type": "panel", "x": 36, "y": 28, "w": 408, "h": 214, "title": "กระเป๋า" },
+        { "id": "tabs", "type": "tabs", "x": 52, "y": 44, "w": 168, "tabs": ["ทั้งหมด", "อาหาร", "ของสำคัญ"], "selected": 0 },
+        { "id": "grid", "type": "inventory", "x": 52, "y": 62, "cols": 7, "rows": 5, "slot": 22, "gap": 2, "selected": 2, "items": [
+          { "icon": "rice_bowl", "count": 3 }, { "icon": "sticky_rice", "count": 6 }, { "icon": "mango", "count": 5 }, { "icon": "banana", "count": 12 }, { "icon": "coconut", "count": 2 }, { "icon": "fish", "count": 4 }, { "icon": "chili", "count": 9 },
+          { "icon": "egg", "count": 10 }, { "icon": "thai_tea", "count": 2 }, { "icon": "herb", "count": 7 }, { "icon": "medicine", "count": 3 }, { "icon": "lotus" }, { "icon": "garland", "count": 2 }, { "icon": "candle", "count": 5 },
+          { "icon": "lantern" }, { "icon": "key" }, { "icon": "letter" }, { "icon": "map" }, { "icon": "scroll" }, { "icon": "bell" }, { "icon": "umbrella" },
+          { "icon": "broom" }, { "icon": "package" }, { "icon": "coin", "count": 99 }, null, null, null, null
+        ] },
+        { "id": "detail", "type": "tooltip", "x": 232, "y": 62, "w": 196, "title": "มะม่วงน้ำดอกไม้", "text": "มะม่วงสุกหอมหวาน ฟื้นพลัง 20 HP ใช้ทำข้าวเหนียวมะม่วงได้", "icon": "mango" },
+        { "id": "use", "type": "button", "x": 232, "y": 132, "w": 94, "text": "ใช้", "icon": "mango", "state": "focus" },
+        { "id": "drop", "type": "button", "x": 334, "y": 132, "w": 94, "text": "ทิ้ง" },
+        { "id": "give", "type": "button", "x": 232, "y": 158, "w": 196, "text": "มอบให้ป้าแดง", "state": "disabled" },
+        { "id": "coin_icon", "type": "icon", "x": 236, "y": 200, "icon": "coin" },
+        { "id": "coin_text", "type": "label", "x": 256, "y": 212, "text": "1,250 บาท", "size": 9 },
+        { "id": "weight", "type": "label", "x": 424, "y": 212, "text": "ช่อง 24/35", "size": 8, "align": "right", "color": "#cdb492" },
+        { "id": "cursor", "type": "cursor", "x": 110, "y": 74, "kind": "hand" }
+      ]
+    },
+    "shop": {
+      "title": "Night-market shop",
+      "style": "night",
+      "background": "backgrounds/thai_village_shops.png",
+      "dim": 0.35,
+      "widgets": [
+        { "id": "frame", "type": "panel", "x": 90, "y": 40, "w": 300, "h": 190, "title": "ร้านป้าแดง · ตลาดกลางคืน" },
+        { "id": "stock", "type": "inventory", "x": 106, "y": 60, "cols": 5, "rows": 3, "slot": 24, "gap": 3, "selected": 0, "items": [
+          { "icon": "thai_tea", "count": 20 }, { "icon": "sticky_rice", "count": 8 }, { "icon": "garland", "count": 4 }, { "icon": "candle", "count": 10 }, { "icon": "lantern", "count": 2 },
+          { "icon": "chili", "count": 30 }, { "icon": "coconut", "count": 6 }, { "icon": "medicine", "count": 3 }, { "icon": "umbrella" }, { "icon": "bell" }
+        ] },
+        { "id": "price", "type": "tooltip", "x": 248, "y": 60, "w": 128, "title": "ชาไทยเย็น", "text": "หวานมัน ชื่นใจ ราคา 25 บาท", "icon": "thai_tea" },
+        { "id": "buy", "type": "button", "x": 248, "y": 124, "w": 128, "text": "ซื้อ 25 ฿", "icon": "coin", "state": "focus" },
+        { "id": "qty", "type": "slider", "x": 106, "y": 156, "w": 270, "text": "จำนวน", "value": 0.2 },
+        { "id": "wallet", "type": "bar", "x": 106, "y": 180, "w": 248, "h": 10, "kind": "stamina", "value": 1250, "max": 2000, "label": "เงิน", "showText": true },
+        { "id": "leave", "type": "button", "x": 190, "y": 202, "w": 100, "text": "ออกจากร้าน" }
+      ]
+    }
+  }
+}

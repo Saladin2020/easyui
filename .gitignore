@@ -1,0 +1,15 @@
+node_modules/
+dist/
+web/dist/
+.scratch/
+# workspace data when the repo itself is used as the workspace
+/screens/
+/backgrounds/
+/exports/
+/easyui.config.json
+*.log
+.DS_Store
+.env
+.env.*
+.cursor/
+*.local.json

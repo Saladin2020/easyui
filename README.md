@@ -1,0 +1,186 @@
+<p align="center">
+  <img src="docs/assets/icon-512.png" width="120" alt="Easy UI icon" />
+</p>
+
+# Easy UI
+
+**ชุด UI พิกเซลสำหรับเกมหมู่บ้านไทย · ไม้สัก โคมแดง กระดาษสา ตลาดกลางคืน**  
+Describe game screens in a small JSON format — nine-slice panels, buttons with every state, HP/MP bars,
+inventory grids, hotbars, menus, sliders, tabs, tooltips — render them to PNG, edit them in a web editor, and
+export a **Godot 4.3+ Theme** (StyleBoxTexture nine-slices + Kanit + ready-made `.tscn` screens) or a
+**PixiJS v8 atlas** with small component helpers. Ships 24 procedural Thai-village item icons and Thai text
+with bundled Kanit. A sibling of [Easy Sprite](https://github.com/Saladin2020/easysprite),
+[Easy Scene](https://github.com/Saladin2020/easyscene), [Easy Dialogue](https://github.com/Saladin2020/easydialogue)
+and [Easy SFX](https://github.com/Saladin2020/easysfx).
+
+[![license](https://img.shields.io/badge/license-MIT-2e2014?style=flat-square)](LICENSE)
+[![node](https://img.shields.io/badge/node-%3E%3D20-3f7d52?style=flat-square)](https://nodejs.org)
+[![export](https://img.shields.io/badge/export-Godot%204.3%2B%20%7C%20PixiJS%20v8%20%7C%20PNG-f4ae3d?style=flat-square)](#export)
+[![mcp](https://img.shields.io/badge/MCP-7%20tools-c45c26?style=flat-square)](docs/MCP.md)
+
+> Easy UI **draws · lays out · exports**. Every frame and icon is generated from code (CC0), no image
+> generation and no paid APIs; the CLI renders, the web editor, the Godot scenes and the Pixi helper all use
+> the same pixels and the same layout rules, so what you see in the PNG is what you get in the engine.
+
+<p align="center">
+  <img src="docs/assets/screen-inventory.png" width="900" alt="Inventory screen: teak panel, tabs, 7×5 item grid, tooltip, buttons" />
+</p>
+
+---
+
+## What you get
+
+| Frames | Widgets | Icons | Export |
+| --- | --- | --- | --- |
+| 4 styles — **teak** ไม้สัก, **lantern** โคมแดง, **paper** กระดาษสา, **night** ตลาดกลางคืน — 25 parts each: panels, plate, buttons (normal / hover / pressed / disabled / focus), slots, bars, slider, checkbox, tabs, hand + arrow cursors, key badge | `panel label button menu bar inventory hotbar icon toggle slider tabs tooltip cursor image`; Thai word-wrap (Intl.Segmenter), focus hand cursor | 24 × 16 px: rice bowl, sticky-rice basket, mango, banana, coconut, fish, chili, lotus, Thai tea, lantern, garland, candle, bell, umbrella, map, scroll, letter, key, baht coin… (th + en names) | Godot 4.3+ project (Theme `.tres` per style, type variations, Kanit, one `.tscn` per screen, focus script), PixiJS v8 Spritesheet atlas + `easyui-pixi.js` + demo, PNG renders / sheets, JSON |
+
+The demo doc `village` has six screens over Easy Dialogue's village backgrounds: **title**, **hud**, **pause**
+(lantern), **settings** (paper), **inventory** and a **shop** (night).
+
+<p align="center">
+  <img src="docs/assets/screen-title.png" width="440" alt="Title screen with menu" />
+  <img src="docs/assets/screen-hud.png" width="440" alt="HUD: HP/MP/XP bars, coins, quest tooltip, hotbar" />
+  <img src="docs/assets/screen-settings.png" width="440" alt="Settings in the paper style: tabs, sliders, toggles" />
+  <img src="docs/assets/screen-shop.png" width="440" alt="Night-market shop" />
+</p>
+
+<p align="center">
+  <img src="docs/assets/icons.png" width="900" alt="The 24 item icons with Thai and English names" />
+</p>
+
+## Quick start
+
+```bash
+npm install
+npx tsx src/cli.ts init --workspace ./my-ui       # screens/village.easyui.json + backgrounds/
+npx tsx src/cli.ts serve --workspace ./my-ui      # editor → http://127.0.0.1:8838/
+```
+
+Dev mode: `npm run dev` (API on 8838) + `npx vite --config web/vite.config.ts` (UI on 5179).
+
+The editor draws the screen live in the browser with the shared renderer: click a widget to select it, drag
+to move, arrows nudge (Shift = 8 px), Delete removes; the inspector edits position, size, text, states, bar
+values, icons (picker) or the raw widget JSON. Switch the screen style, background and dim; add screens and
+widgets; validation is live; `Ctrl+S` saves; export buttons write the engine folders.
+
+<p align="center">
+  <img src="docs/assets/ui-editor-inventory.png" width="900" alt="Editor: screens and widgets list, live stage, inspector and export panel" />
+</p>
+
+## CLI
+
+```bash
+easyui list --doc village                        # screens, styles, widget types
+easyui render inventory --out inv.png --scale 3  # 1440×810 PNG
+easyui render village:pause --style night --out pause-night.png
+easyui icons                                     # names (th · en);  --out icons.png --styles styles.png
+easyui check village                             # JSON-path errors + layout warnings; exit 1 on errors
+easyui export --preset all                       # godot | pixi | png | json | all
+easyui info · init · serve [--port 8838]
+```
+
+(`npx tsx src/cli.ts …` from a checkout, `node dist/cli.js …` after `npm run build`.)
+
+## Screen format
+
+```json
+{
+  "format": "easyui/1",
+  "name": "Lantern Village UI",
+  "style": "teak",
+  "viewport": { "width": 480, "height": 270 },
+  "background": "backgrounds/thai_village_street.png",
+  "screens": {
+    "pause": {
+      "style": "lantern",
+      "dim": 0.55,
+      "widgets": [
+        { "type": "menu", "x": 185, "y": 82, "w": 110, "title": "หยุดชั่วคราว",
+          "items": ["เล่นต่อ", "กระเป๋า", "ตั้งค่า", "บันทึกเกม", "กลับหน้าหลัก"], "selected": 1, "disabled": [3] },
+        { "type": "bar", "x": 20, "y": 20, "w": 80, "kind": "hp", "value": 72, "max": 100, "label": "HP", "showText": true },
+        { "type": "hotbar", "x": 147, "y": 240, "slots": 8, "items": [{ "icon": "mango", "count": 5 }, null] }
+      ]
+    }
+  }
+}
+```
+
+Coordinates are viewport pixels; label `y` is the text baseline. Full reference: **[docs/FORMAT.md](docs/FORMAT.md)**.
+
+<p align="center">
+  <img src="docs/assets/styles-pause-teak.png" width="216" alt="teak" />
+  <img src="docs/assets/styles-pause-lantern.png" width="216" alt="lantern" />
+  <img src="docs/assets/styles-pause-paper.png" width="216" alt="paper" />
+  <img src="docs/assets/styles-pause-night.png" width="216" alt="night" />
+</p>
+
+## Export
+
+| Preset | Output (`exports/<doc>-<preset>/`) |
+| --- | --- |
+| `godot` | Godot 4.3+ project: `easyui/themes/{teak,lantern,paper,night}.tres`, `easyui/textures/<style>/*.png`, `easyui/icons/*.png`, Kanit fonts, `easyui/easyui_screen.gd` (focus + hand cursor + demo nav) and `easyui_slot.gd`, `scenes/<screen>.tscn`, `project.godot` (480×270 viewport, 1440×810 window, `canvas_items` stretch, nearest filter, custom theme + cursor), `test_ui.gd`, `screenshot.gd` |
+| `pixi` | `easyui.atlas.png` + `easyui.atlas.json` (PixiJS Spritesheet format; `meta.easyui` has nine-slice margins, colours, icon names), `easyui-pixi.js`, fonts, the doc, backgrounds and a demo `index.html` |
+| `png` | `screens/*.png`, `icons.png`, `styles.png`, loose `icons/` and `parts/<style>/` PNGs |
+| `json` | the doc |
+
+**Godot 4.3+** — set `res://easyui/themes/teak.tres` as the project theme (or on any Control). Plain
+Controls pick up the look; type variations give the rest:
+
+| Control | Theme Type Variation |
+| --- | --- |
+| `Panel` | *(default)*, `PanelSmall`, `Plate` |
+| `PanelContainer` | `Slot`, `SlotSelected` |
+| `ProgressBar` | `HpBar`, `MpBar`, `XpBar`, `StaminaBar` |
+| `Label` | `TitleLabel`, `MutedLabel`, `PlateLabel`, `CountLabel` |
+
+`Button`, `CheckBox`, `HSlider` and `TabBar` are themed directly. The generated scenes are plain Controls you
+can open and edit; Tab / Shift+Tab cycles them in the demo, Esc goes back.
+
+<p align="center">
+  <img src="docs/assets/godot-inventory.png" width="900" alt="The inventory scene running in Godot 4.3" />
+</p>
+
+**PixiJS v8**
+
+```js
+import { loadUi } from "./easyui-pixi.js";
+const ui = await loadUi(PIXI, "./easyui.atlas.json");                 // atlas + Kanit
+app.stage.addChild(ui.panel({ x: 20, y: 20, w: 200, h: 120, title: "กระเป๋า" }));
+const hp = ui.bar({ x: 30, y: 40, w: 80, kind: "hp", value: 72, max: 100, label: "HP", showText: true });
+hp.set(50);
+const inv = ui.inventoryGrid({ x: 30, y: 60, cols: 6, rows: 3, items: [{ icon: "mango", count: 5 }], onSelect: (i, it) => {} });
+const screen = await ui.renderScreen(doc, "pause", { onAction: (a) => console.log(a) });   // whole screen
+screen.bindKeys(window);                                                // ↑/↓/Enter menus · arrows grids · 1-8 hotbar
+```
+
+Create the app at the viewport size with `resolution: 3` so Thai text stays sharp.
+
+## MCP
+
+`npm run mcp` (stdio) or `npm run mcp:http` (`http://127.0.0.1:8839/mcp`). Tools: `workspace_info`,
+`list_screens`, `get_screen`, `write_screen`, `render_screen`, `list_icons`, `export_ui`.
+See **[docs/MCP.md](docs/MCP.md)**.
+
+## Security
+
+The server binds to `127.0.0.1` by default and rejects cross-origin writes and non-loopback `Host` headers.
+`--host 0.0.0.0` requires the token printed at startup (or `EASYUI_TOKEN`). API and MCP paths stay inside
+the workspace plus `EASYUI_ALLOWED_DIRS`; `/api/files` serves PNGs from the workspace only.
+
+## Development
+
+```bash
+npm run typecheck && npm test && npm run build && npm run smoke
+GODOT=/path/to/godot npx vitest run test/godot.test.ts       # import the export, instantiate every screen
+npm run docs:images                                          # README renders
+python3 scripts/check-pixi.py exports/village-pixi [shot]    # headless Chrome: every screen + keys + clicks
+python3 scripts/capture-ui.py                                # editor screenshots (server on :8838)
+xvfb-run -a godot --path exports/village-godot --script res://screenshot.gd   # Godot screenshots
+```
+
+Ports: API / editor 8838 · MCP HTTP 8839 · Vite 5179.
+
+## Credits
+
+All frames and icons are generated from code and CC0. Backgrounds from Easy Dialogue (CC0). Kanit © The
+Kanit Project Authors (SIL OFL 1.1). See [CREDITS.md](CREDITS.md). Code: MIT © Salahuddin Benno.
