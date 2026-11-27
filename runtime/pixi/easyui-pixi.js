@@ -12,6 +12,9 @@
 // MIT License. https://github.com/Saladin2020/easyui
 
 import { MenuStack } from "./easyui-menu-core.js";
+/** Hover moves a menu cursor only for a real mouse on a device that can hover (not phones / tablets). */
+const hoverSelects = (e) => e.pointerType === "mouse" && (globalThis.matchMedia?.("(hover: hover)").matches ?? true);
+
 export { MenuStack };
 
 const seg = typeof Intl !== "undefined" && Intl.Segmenter ? new Intl.Segmenter("th", { granularity: "word" }) : null;
@@ -210,7 +213,7 @@ export class UiKit {
     const hand = this.sprite(`${style}/cursor_hand`);
     const buttons = items.map((it, i) => {
       const b = this.button({ x, y: y + top + i * (itemH + gap), w, h: itemH, text: it, state: disabled.includes(i) ? "disabled" : "normal", style, onClick: () => onSelect?.(i, it) });
-      b.on("pointerover", () => c.select(i));
+      b.on("pointerover", (e) => hoverSelects(e) && c.select(i));
       c.addChild(b);
       return b;
     });
@@ -307,7 +310,8 @@ export class UiKit {
           const p = row.toLocal(e.global);
           return row.__slider ? (p.x - row.__slider.tx - 2) / (row.__slider.tw - 4) : p.x / iw;
         };
-        row.on("pointerover", () => menu.select(i));
+        // hover selects for a mouse only: on phones a tap selects + picks, and a stale touch point must not move the cursor
+        row.on("pointerover", (e) => hoverSelects(e) && menu.select(i));
         row.on("pointertap", (e) => menu.tap(i, ratioOf(e)));
         row.on("pointermove", (e) => { if (row.__slider && e.buttons & 1) menu.select(i) && menu.change(0, ratioOf(e)); });
         c.addChild(row);

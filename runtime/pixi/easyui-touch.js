@@ -204,7 +204,7 @@ export function mountTouchControls(opts = {}) {
 
   function place() {
     const w = globalThis.innerWidth, h = globalThis.innerHeight;
-    L = touchLayout({ w, h, safe: safeInsets(), game, buttons: pad.buttons.length, size: opts.size ?? 1 });
+    L = touchLayout({ w, h, safe: safeInsets(), game, buttons: pad.buttons.length, size: opts.size ?? 1, fit: opts.fit ?? "auto" });
     const s = L.stick;
     css(stickBox, { left: `${s.x - s.r}px`, top: `${s.y - s.r}px`, width: `${s.r * 2}px`, height: `${s.r * 2}px` });
     css(knob, { left: `${s.r * 0.55}px`, top: `${s.r * 0.55}px`, width: `${s.r * 0.9}px`, height: `${s.r * 0.9}px` });

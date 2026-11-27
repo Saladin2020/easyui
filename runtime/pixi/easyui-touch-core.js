@@ -126,19 +126,31 @@ export function shouldShow(mode = "auto", env = {}) {
 
 /**
  * Where everything goes on a w×h screen (CSS px) with safe-area insets.
- * Landscape: the game is fitted and centred, stick bottom-left, buttons bottom-right over the game's edges.
+ * Landscape: the game is fitted and centred, stick bottom-left, buttons bottom-right; with fit "auto" (default) the game
+ * shrinks to leave side gutters for them when it stays ≥ 65% of full size ("gutters" always, "overlay" never).
  * Portrait: the game sits at the top at full width; the controls fill the band below it (overlaid when the band is short).
  */
-export function touchLayout({ w, h, safe = {}, game = { w: 480, h: 270 }, buttons = 2, size = 1, integer = false }) {
+export function touchLayout({ w, h, safe = {}, game = { w: 480, h: 270 }, buttons = 2, size = 1, integer = false, fit = "auto" }) {
   const S = { top: safe.top ?? 0, right: safe.right ?? 0, bottom: safe.bottom ?? 0, left: safe.left ?? 0 };
   const aw = Math.max(1, w - S.left - S.right), ah = Math.max(1, h - S.top - S.bottom);
   const orientation = w >= h ? "landscape" : "portrait";
-  let scale = Math.min(aw / game.w, ah / game.h);
-  if (integer && scale >= 1) scale = Math.floor(scale);
-  const gw = Math.round(game.w * scale), gh = Math.round(game.h * scale);
   const unit = Math.max(36, Math.min(72, Math.min(w, h) * 0.12)) * size; // one button's diameter
   const r = Math.round(unit * 1.15); // stick radius
   const pad = Math.round(unit * 0.35);
+  const fitScale = (fw, fh) => {
+    let k = Math.min(fw / game.w, fh / game.h);
+    if (integer && k >= 1) k = Math.floor(k);
+    return k;
+  };
+  let scale = fitScale(aw, ah);
+  // landscape: keep the stick and buttons in side gutters when that costs at most 35% of the game's size
+  let gutter = 0;
+  if (orientation === "landscape" && fit !== "overlay") {
+    const gw = 2 * r + 2 * pad;
+    const k = fitScale(aw - 2 * gw, ah);
+    if (fit === "gutters" || k >= scale * 0.65) (gutter = gw), (scale = k);
+  }
+  const gw = Math.round(game.w * scale), gh = Math.round(game.h * scale);
   const g = { w: gw, h: gh, scale, x: 0, y: 0 };
   let band; // the rect the controls live in
   if (orientation === "portrait") {
@@ -151,7 +163,9 @@ export function touchLayout({ w, h, safe = {}, game = { w: 480, h: 270 }, button
     g.y = S.top + Math.round((ah - gh) / 2);
     band = { x: S.left, y: h - S.bottom - (r * 2 + pad * 2), w: aw, h: r * 2 + pad * 2 };
   }
-  const cy = Math.round(band.y + band.h / 2 + (orientation === "portrait" ? 0 : 0));
+  // a tall portrait band keeps the controls in the lower part, where thumbs rest
+  const mid = band.y + band.h / 2;
+  const cy = Math.round(orientation === "portrait" ? Math.max(mid, band.y + band.h - pad - r - unit * 0.6) : mid);
   const stick = { x: band.x + pad + r, y: cy, r };
   // buttons: a 2-row diamond-ish cluster anchored bottom-right
   const out = [];
@@ -168,5 +182,5 @@ export function touchLayout({ w, h, safe = {}, game = { w: 480, h: 270 }, button
   const menu = { x: w - S.right - pad - unit, y: roomy ? band.y + Math.round(pad / 2) : S.top + pad, w: unit, h: mh };
   // one spare slot left of the menu button (e.g. a fullscreen toggle)
   const aux = { x: menu.x - pad - mh, y: menu.y, w: mh, h: mh };
-  return { orientation, game: g, band, stick, buttons: out, menu, aux, unit, safe: S };
+  return { orientation, game: g, band, stick, buttons: out, menu, aux, unit, gutter, safe: S };
 }

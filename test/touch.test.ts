@@ -123,6 +123,17 @@ describe("touchLayout", () => {
     for (let i = 0; i < L.buttons.length; i++) for (let j = i + 1; j < L.buttons.length; j++) expect(overlaps(L.buttons[i], L.buttons[j])).toBe(false);
     for (const b of L.buttons) expect(overlaps(b, L.stick)).toBe(false);
   });
+  it("landscape: side gutters keep the stick off the game; overlay mode lets the game fill the height", () => {
+    const L = touchLayout({ w: 844, h: 390, safe: { left: 47, right: 47 }, buttons: 3 });
+    expect(L.gutter).toBeGreaterThan(0);
+    expect(L.stick.x + L.stick.r).toBeLessThanOrEqual(L.game.x);
+    expect(L.game.w).toBeGreaterThan(400);
+    const O = touchLayout({ w: 844, h: 390, safe: { left: 47, right: 47 }, buttons: 3, fit: "overlay" });
+    expect(O.gutter).toBe(0);
+    expect(O.game.h).toBe(390);
+    // a nearly 16:9 tablet would lose too much → overlay
+    expect(touchLayout({ w: 1024, h: 600, buttons: 3 }).gutter).toBe(0);
+  });
   it("portrait phone: game on top at full width, controls in the band below", () => {
     const L = touchLayout({ w: 390, h: 844, safe: { top: 47, bottom: 34 }, buttons: 4 });
     expect(L.orientation).toBe("portrait");
