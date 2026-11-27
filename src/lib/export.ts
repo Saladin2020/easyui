@@ -134,6 +134,7 @@ async function writePixi(w: Writer, root: string, doc: UiDoc, id: string, warnin
   await w.write(`${id}.easyui.json`, `${JSON.stringify(rewired, null, 2)}\n`);
   await w.copy(path.join(RUNTIME_DIR, "pixi", "easyui-pixi.js"), "easyui-pixi.js");
   await w.copy(path.join(RUNTIME_DIR, "pixi", "easyui-menu-core.js"), "easyui-menu-core.js");
+  for (const f of ["easyui-touch-core.js", "easyui-touch.js"]) await w.copy(path.join(RUNTIME_DIR, "pixi", f), f);
   await w.write("index.html", pixiHtml(doc, id));
   await w.write(
     "README.txt",
@@ -146,6 +147,8 @@ Files
   easyui.atlas.png / .json   every UI part in the 4 styles + ${ICON_NAMES.length} item icons, PixiJS Spritesheet format;
                              meta.easyui has the nine-slice margins, text colours and icon names (th/en)
   easyui-menu-core.js        MenuStack: title / pause / settings / save-slot menu logic (keyboard + pointer), engine-free
+  easyui-touch.js            mountTouchControls(): phone stick / D-pad + action buttons that send your game's keys
+  easyui-touch-core.js       (multitouch, auto-show on touch screens, safe-area aware, portrait + landscape); engine-free
   easyui-pixi.js             loadUi(PIXI, "./easyui.atlas.json") → ui.gameMenu / panel / button / menu / bar / slot /
                              inventoryGrid / hotbar / toggle / slider / tabs / tooltip, and ui.renderScreen(doc, id)
   ${id}.easyui.json          the screens (image paths point at images/)
@@ -652,6 +655,7 @@ async function writeGodot(w: Writer, root: string, doc: UiDoc, warnings: string[
   bg.drawImage(hand, 0, 0, big.width, big.height);
   await w.write("easyui/cursor_hand_x3.png", big.toBuffer("image/png"));
   await w.copy(path.join(RUNTIME_DIR, "godot", "easyui_screen.gd"), "easyui/easyui_screen.gd");
+  await w.copy(path.join(RUNTIME_DIR, "godot", "easyui_touch.gd"), "easyui/easyui_touch.gd");
   await w.copy(path.join(RUNTIME_DIR, "godot", "easyui_slot.gd"), "easyui/easyui_slot.gd");
   const images = await copyImages(w, root, doc, "easyui/backgrounds/", warnings);
   for (const sid of order) await w.write(`scenes/${sid}.tscn`, godotScene(doc, sid, { order, images }));
@@ -701,6 +705,7 @@ Use it in your own game:
   3. Theme type variations: PanelSmall, Plate, Slot, SlotSelected, HpBar, MpBar, XpBar, StaminaBar,
      TitleLabel, MutedLabel, PlateLabel, CountLabel (set "Theme Type Variation" in the inspector).
   4. scenes/*.tscn are plain Controls you can open and edit; easyui_screen.gd only handles focus + demo nav.
+  5. easyui/easyui_touch.gd: on-screen stick + TouchScreenButtons that press your InputMap actions (phones).
   For crisp Thai text keep stretch mode "canvas_items" (window ${doc.viewport.width * 3}×${doc.viewport.height * 3}, viewport ${doc.viewport.width}×${doc.viewport.height}).
 
 Headless check:  godot --headless --editor --quit --path .   (imports)   then

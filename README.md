@@ -112,6 +112,37 @@ const pause = ui.gameMenu({
 pause.bindKeys(window);
 ```
 
+## Touch controls for phones (stick / D-pad · action buttons)
+
+Every Pixi export ships `easyui-touch.js` + `easyui-touch-core.js`; the Godot export ships `easyui/easyui_touch.gd`.
+
+```js
+import { mountTouchControls } from "./easyui-touch.js";
+const touch = mountTouchControls({
+  profiles: {
+    map:    { stick: "8way",       buttons: [{ id: "ok", label: "E", key: "e" }, { id: "wait", label: "Z", key: "z" }, { id: "back", label: "B", key: "Escape" }] },
+    street: { stick: "horizontal", buttons: [{ id: "ok", label: "E", key: "e" }] },
+    action: { stick: "8way",       buttons: [{ id: "jump", label: "⤒", key: " " }, { id: "hit", label: "J", key: "j" }, { id: "heavy", label: "K", key: "k" }] },
+    menu:   { stick: "4way",       buttons: [{ id: "ok", label: "A", key: "Enter" }, { id: "back", label: "B", key: "Escape" }] },
+  },
+  profile: "map", mode: "auto",          // auto = touch screens only; "on" / "off" for a settings toggle
+  menu: { label: "≡", key: "Escape" },    // top-right menu / back button
+  game: { w: 480, h: 270 }, onLayout: (L) => placeCanvas(L.game),
+});
+touch.setProfile("street");              // switch per scene; held keys are released first
+```
+
+- **Input wiring:** buttons and the stick send the game's own keys as synthetic `keydown` / `keyup` events on `window`
+  (`keyboardSink`), so tilemap overworlds, side-view streets, Easy Action levels, Easy Battle and `MenuStack` menus work
+  without code changes. Pass `sink: (key, down) => …` to route elsewhere.
+- **Stick modes:** `8way` (diagonals hold two arrows, top-down), `4way` (menus), `horizontal` (side-view streets),
+  `vertical`, `none`; `style: "dpad"` draws a cross instead of the stick.
+- Multitouch (one pointer per control), safe-area aware (`env(safe-area-inset-*)`), landscape (game centred, controls
+  over the bottom corners) and portrait (game on top, controls in the band below). Semi-transparent original pixel art.
+- Godot: `easyui_touch.gd` (CanvasLayer) presses InputMap actions with `Input.action_press`; buttons are
+  `TouchScreenButton`s; `mode = "auto"` uses `DisplayServer.is_touchscreen_available()`.
+- Easy Kit: configure it in `game.easy.json` under `"touch"` (mode, opacity, size, style, profiles).
+
 ## Quick start
 
 ```bash
