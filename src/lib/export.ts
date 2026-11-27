@@ -133,6 +133,7 @@ async function writePixi(w: Writer, root: string, doc: UiDoc, id: string, warnin
   const rewired = remapImages(doc, (s) => imgs.get(s) ?? "none");
   await w.write(`${id}.easyui.json`, `${JSON.stringify(rewired, null, 2)}\n`);
   await w.copy(path.join(RUNTIME_DIR, "pixi", "easyui-pixi.js"), "easyui-pixi.js");
+  await w.copy(path.join(RUNTIME_DIR, "pixi", "easyui-menu-core.js"), "easyui-menu-core.js");
   await w.write("index.html", pixiHtml(doc, id));
   await w.write(
     "README.txt",
@@ -144,7 +145,8 @@ Open index.html: one tab per screen; ↑/↓/Enter drive menus, arrows move in g
 Files
   easyui.atlas.png / .json   every UI part in the 4 styles + ${ICON_NAMES.length} item icons, PixiJS Spritesheet format;
                              meta.easyui has the nine-slice margins, text colours and icon names (th/en)
-  easyui-pixi.js             loadUi(PIXI, "./easyui.atlas.json") → ui.panel / button / menu / bar / slot /
+  easyui-menu-core.js        MenuStack: title / pause / settings / save-slot menu logic (keyboard + pointer), engine-free
+  easyui-pixi.js             loadUi(PIXI, "./easyui.atlas.json") → ui.gameMenu / panel / button / menu / bar / slot /
                              inventoryGrid / hotbar / toggle / slider / tabs / tooltip, and ui.renderScreen(doc, id)
   ${id}.easyui.json          the screens (image paths point at images/)
   fonts/                     Kanit Regular + Medium (SIL OFL 1.1)
