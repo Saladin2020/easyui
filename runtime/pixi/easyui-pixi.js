@@ -6,8 +6,13 @@
 //   const hp = ui.bar({ kind: "hp", w: 80, value: 72, max: 100, label: "HP", showText: true }); hp.set(50);
 //   const screen = await ui.renderScreen(doc, "inventory");          // whole easyui/1 screen → Container
 //   screen.bindKeys(window);                                          // ↑/↓/Enter on menus, ←→↑↓ on grids
+//   const pause = ui.gameMenu({ pages, start: "pause", onAction, onChange }); // title / pause / settings / slots,
+//   pause.bindKeys(window);                                           // keyboard + mouse / touch (easyui-menu-core.js)
 // Lay out in viewport pixels (480×270) and create the app with `resolution: 3` so text stays sharp.
 // MIT License. https://github.com/Saladin2020/easyui
+
+import { MenuStack } from "./easyui-menu-core.js";
+export { MenuStack };
 
 const seg = typeof Intl !== "undefined" && Intl.Segmenter ? new Intl.Segmenter("th", { granularity: "word" }) : null;
 
@@ -226,6 +231,101 @@ export class UiKit {
     };
     c.activate = () => buttons[c.index]?.click();
     c.select(selected);
+    return c;
+  }
+
+  /**
+   * Game menu (title screen, pause menu, settings, save / load slots, controls help) drawn from a MenuStack.
+   * Keyboard: ↑↓ W S move · ←→ A D change · Enter Space E pick · Esc Backspace back. Mouse / touch: hover selects,
+   * tap picks; tap the left third of a choice row to go back one option; tap a slider where you want it.
+   * `text(str, { x, y, size, color, align })` lets a game draw labels with its own font (e.g. Easy Font bitmap text);
+   * the default is this kit's Kanit text. Returns a Container with .menu (MenuStack), .key(k), .bindKeys(target), .render().
+   */
+  gameMenu({ pages, start, values, closable = true, w = 230, itemH = 22, gap = 3, vw = 480, vh = 270, dim = 0.6, text, hint, style = this.style, onAction, onChange, onClose, onOpen }) {
+    const P = this.PIXI;
+    const C = this.colors(style);
+    const c = new P.Container();
+    c.label = "gameMenu";
+    const menu = new MenuStack({ pages, start, values, closable, onAction, onChange, onClose, onOpen });
+    const T = text ?? ((s, o) => this.text(s, { ...o, style, shadow: false }));
+    const render = () => {
+      for (const d of c.removeChildren()) d.destroy({ children: true });
+      const v = menu.view();
+      const shade = new P.Graphics().rect(0, 0, vw, vh).fill({ color: 0x080503, alpha: dim });
+      shade.eventMode = "static"; // swallow taps behind the menu
+      c.addChild(shade);
+      const rowsH = v.rows.reduce((a, r) => a + (r.kind === "info" ? 14 : itemH) + gap, -gap);
+      const top = v.title ? 18 : 10;
+      const ph = rowsH + top + 26;
+      const px = Math.round((vw - w) / 2);
+      const py = Math.max(4, Math.round((vh - ph) / 2));
+      c.addChild(this.panel({ x: px, y: py, w, h: ph, style }));
+      if (v.title) c.addChild(T(v.title, { x: vw / 2, y: py + 14, size: 10, color: C.title, align: "center" }));
+      let y = py + top + 4;
+      const ix = px + 12;
+      const iw = w - 24;
+      v.rows.forEach((r, i) => {
+        if (r.kind === "info") {
+          c.addChild(T(r.label, { x: ix + 2, y: y + 10, size: 9, color: C.text }));
+          y += 14 + gap;
+          return;
+        }
+        const row = new P.Container();
+        row.position.set(ix, y);
+        const st = r.disabled ? "disabled" : i === v.index ? "focus" : "normal";
+        row.addChild(this.nine(`button_${st}`, iw, itemH, style));
+        const col = r.disabled ? C.disabled : i === v.index ? C.buttonHi : C.button;
+        const mid = itemH / 2 + 4;
+        if (r.kind === "action") row.addChild(T(r.label, { x: iw / 2, y: mid, size: 10, color: col, align: "center" }));
+        else row.addChild(T(r.label, { x: 8, y: mid, size: 10, color: col }));
+        if (r.kind === "choice") row.addChild(T(`◀ ${r.valueLabel ?? r.value} ▶`, { x: iw - 8, y: mid, size: 10, color: col, align: "right" }));
+        if (r.kind === "slider") {
+          const tw = Math.round(iw * 0.42);
+          const tx = iw - tw - 8;
+          const track = this.nine("slider_track", tw, 6, style);
+          track.position.set(tx, itemH / 2 - 3);
+          const fw = Math.round((tw - 4) * Math.max(0, Math.min(1, r.ratio ?? 0)));
+          row.addChild(track);
+          if (fw > 0) {
+            const fill = this.nine("slider_fill", Math.max(2, fw), 4, style);
+            fill.position.set(tx + 2, itemH / 2 - 2);
+            row.addChild(fill);
+          }
+          const knob = this.sprite(`${style}/slider_knob`);
+          knob.position.set(Math.round(tx + 2 + fw - 3.5), itemH / 2 - 5);
+          row.addChild(knob);
+          row.__slider = { tx, tw };
+        }
+        if (i === v.index) {
+          const hand = this.sprite(`${style}/cursor_hand`);
+          hand.position.set(-13, (itemH - 11) / 2);
+          row.addChild(hand);
+        }
+        row.eventMode = "static";
+        row.cursor = r.disabled ? "default" : "pointer";
+        const ratioOf = (e) => {
+          const p = row.toLocal(e.global);
+          return row.__slider ? (p.x - row.__slider.tx - 2) / (row.__slider.tw - 4) : p.x / iw;
+        };
+        row.on("pointerover", () => menu.select(i));
+        row.on("pointertap", (e) => menu.tap(i, ratioOf(e)));
+        row.on("pointermove", (e) => { if (row.__slider && e.buttons & 1) menu.select(i) && menu.change(0, ratioOf(e)); });
+        c.addChild(row);
+        y += itemH + gap;
+      });
+      const h = typeof hint === "function" ? hint(v) : hint;
+      if (h) c.addChild(T(h, { x: vw / 2, y: py + ph - 7, size: 8, color: C.muted ?? C.text, align: "center" }));
+    };
+    menu.subscribe(render);
+    render();
+    c.menu = menu;
+    c.render = render;
+    c.key = (k) => menu.key(k);
+    c.bindKeys = (target = window) => {
+      const h = (e) => { if (c.visible && c.parent && menu.key(e.key)) e.preventDefault(); };
+      target.addEventListener("keydown", h);
+      return () => target.removeEventListener("keydown", h);
+    };
     return c;
   }
 

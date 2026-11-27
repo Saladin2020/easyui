@@ -88,6 +88,30 @@ halal plate is a generic crescent sign, not an official certification mark.
   <img src="docs/assets/icons.png" width="900" alt="The 30 item icons with Thai and English names" />
 </p>
 
+
+## Game menus (title · pause · settings · save slots)
+
+`ui.gameMenu({ pages, start, onAction, onChange, onClose, text })` draws a full menu from plain page data and works with
+the **keyboard** (↑↓ W S move, ←→ A D change, Enter Space E pick, Esc Backspace back) and **mouse / touch** (hover
+selects, tap picks, tap the left third of a choice to step back, tap a slider where you want it). Rows are `action`
+(optionally `to` another page), `choice` (`options`), `slider` (`min max step`) or `info` (help text). `rows` can be a
+function, so a save page re-reads Easy Save slots every time it opens. Pass `text(str, {x, y, size, color, align})` to
+draw labels with your own font (e.g. Easy Font bitmap text). The logic lives in `easyui-menu-core.js` (`MenuStack`,
+engine-free and unit-tested); the Pixi export ships both files.
+
+```js
+const pause = ui.gameMenu({
+  start: "pause", hint: "↑↓ เลือก · ←→ ปรับ · Enter ตกลง · Esc กลับ",
+  pages: {
+    pause: { title: "พักเกม", rows: [{ id: "resume", label: "เล่นต่อ" }, { id: "load", label: "โหลด", to: "load" }, { id: "settings", label: "ตั้งค่า", to: "settings" }] },
+    load: { title: "โหลด", rows: () => saves.list().filter((s) => s.kind !== "auto").map((s) => ({ id: s.slot, label: s.exists ? s.meta.label : "ว่าง", disabled: !s.exists })) },
+    settings: { title: "ตั้งค่า", rows: [{ id: "lang", label: "ภาษา", kind: "choice", options: [{ value: "th", label: "ไทย" }, { value: "en", label: "English" }, { value: "ms", label: "Melayu" }] }, { id: "volume", label: "เสียง", kind: "slider", value: 0.8 }] },
+  },
+  onAction: (row, m) => {}, onChange: (row, value) => {}, onClose: () => (pause.visible = false),
+});
+pause.bindKeys(window);
+```
+
 ## Quick start
 
 ```bash

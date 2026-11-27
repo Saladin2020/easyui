@@ -6,9 +6,11 @@ import path from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
+// node + the tsx CLI directly: spawning "npx" fails on Windows without a shell
+const TSX_CLI = `${process.cwd()}/node_modules/tsx/dist/cli.mjs`;
 
 const ws = mkdtempSync(path.join(os.tmpdir(), "easyui-smoke-"));
-execFileSync("npx", ["tsx", "src/cli.ts", "init", "--workspace", ws], { stdio: "ignore" });
+execFileSync(process.execPath, [TSX_CLI, "src/cli.ts", "init", "--workspace", ws], { stdio: "ignore" });
 const fail = (m) => {
   console.error("FAIL", m);
   process.exitCode = 1;
@@ -37,7 +39,7 @@ async function exercise(client, label) {
 // stdio
 {
   const client = new Client({ name: "smoke", version: "0.0.1" });
-  await client.connect(new StdioClientTransport({ command: "npx", args: ["tsx", "src/mcp/server.ts", "--workspace", ws], cwd: process.cwd(), env: { ...process.env }, stderr: "ignore" }));
+  await client.connect(new StdioClientTransport({ command: process.execPath, args: [TSX_CLI, "src/mcp/server.ts", "--workspace", ws], cwd: process.cwd(), env: { ...process.env }, stderr: "ignore" }));
   await exercise(client, "stdio");
   const exp = body(await client.callTool({ name: "export_ui", arguments: { preset: "pixi" } }));
   console.log("[stdio] export pixi:", exp.dirs?.map((d) => path.relative(ws, d)).join(", "), "files", exp.files);
@@ -48,7 +50,7 @@ async function exercise(client, label) {
 // HTTP (Streamable HTTP on a spare port)
 {
   const port = 18839 + Math.floor(Math.random() * 500);
-  const proc = spawn("npx", ["tsx", "src/mcp/server.ts", "--http", "--port", String(port), "--workspace", ws], { stdio: ["ignore", "ignore", "pipe"] });
+  const proc = spawn(process.execPath, [TSX_CLI, "src/mcp/server.ts", "--http", "--port", String(port), "--workspace", ws], { stdio: ["ignore", "ignore", "pipe"] });
   await new Promise((resolve, reject) => {
     const t = setTimeout(() => reject(new Error("MCP HTTP did not start")), 20000);
     proc.stderr.on("data", (d) => {

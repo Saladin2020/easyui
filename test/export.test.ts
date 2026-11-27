@@ -81,7 +81,7 @@ describe("exportUi", () => {
     expect(atlas.meta.easyui.icons.mango.th).toBe("มะม่วง");
     const doc = JSON.parse(await readFile(path.join(dir, "village.easyui.json"), "utf8"));
     expect(doc.background).toBe("images/thai_village_street.png");
-    for (const f of ["easyui-pixi.js", "index.html", "easyui.atlas.png", "fonts/Kanit-Regular.ttf", "images/thai_village_shops.png"]) expect(existsSync(path.join(dir, f)), f).toBe(true);
+    for (const f of ["easyui-pixi.js", "easyui-menu-core.js", "index.html", "easyui.atlas.png", "fonts/Kanit-Regular.ttf", "images/thai_village_shops.png"]) expect(existsSync(path.join(dir, f)), f).toBe(true);
   });
 
   it("png + json + all", async () => {
