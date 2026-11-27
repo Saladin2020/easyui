@@ -6,6 +6,7 @@
 //     profiles: { map: { stick: "8way", buttons: [{ id: "ok", label: "A", key: "Enter" }] } },
 //     profile: "map", mode: "auto",            // "auto" (touch devices only) | "on" | "off"
 //     menu: { label: "≡", key: "p" },           // optional top-right menu button
+//     fullscreen: true,                         // optional ⛶ button next to it (toggleFullscreen())
 //     game: { w: 480, h: 270 },                 // the canvas size, for touchLayout()
 //     onLayout: (L) => {},                      // place the canvas: L.game = { x, y, w, h, scale } (CSS px)
 //   });
@@ -78,6 +79,18 @@ function safeInsets() {
   return v;
 }
 
+/** Enter / leave fullscreen (and try to lock landscape on phones); safe to call anywhere. */
+export async function toggleFullscreen(target = document.documentElement) {
+  const d = document;
+  try {
+    if (d.fullscreenElement || d.webkitFullscreenElement) return void (await (d.exitFullscreen ?? d.webkitExitFullscreen)?.call(d));
+    await (target.requestFullscreen ?? target.webkitRequestFullscreen)?.call(target, { navigationUI: "hide" });
+    await globalThis.screen?.orientation?.lock?.("landscape").catch(() => {});
+  } catch {
+    /* not allowed here (iOS Safari on iPhone has no element fullscreen) */
+  }
+}
+
 export function mountTouchControls(opts = {}) {
   const root = opts.root ?? document.body;
   const game = opts.game ?? { w: 480, h: 270 };
@@ -123,6 +136,21 @@ export function mountTouchControls(opts = {}) {
     css(t, { position: "relative", fontSize: "min(4.5vmin, 22px)" });
     menuEl.appendChild(t);
     el.appendChild(menuEl);
+  }
+
+  // optional fullscreen toggle (left of the menu button)
+  const fsEl = opts.fullscreen ? document.createElement("div") : null;
+  if (fsEl) {
+    fsEl.dataset.touch = "fullscreen";
+    fsEl.title = "Fullscreen";
+    css(fsEl, { position: "absolute", pointerEvents: "auto", touchAction: "none", opacity: String(opacity), display: "flex", alignItems: "center", justifyContent: "center", color: INK, fontWeight: "700" });
+    fsEl.appendChild(pixelImg(disc(12, art.face, art.rim)));
+    const t = document.createElement("span");
+    t.textContent = "⛶";
+    css(t, { position: "relative", fontSize: "min(3.6vmin, 18px)", pointerEvents: "none" });
+    fsEl.appendChild(t);
+    fsEl.addEventListener("pointerup", (e) => { e.preventDefault(); toggleFullscreen(opts.fullscreenTarget); });
+    el.appendChild(fsEl);
   }
 
   let L = null;
@@ -181,6 +209,7 @@ export function mountTouchControls(opts = {}) {
     css(stickBox, { left: `${s.x - s.r}px`, top: `${s.y - s.r}px`, width: `${s.r * 2}px`, height: `${s.r * 2}px` });
     css(knob, { left: `${s.r * 0.55}px`, top: `${s.r * 0.55}px`, width: `${s.r * 0.9}px`, height: `${s.r * 0.9}px` });
     btnEls.forEach((d, i) => { const b = L.buttons[i]; css(d, { left: `${b.x - b.r}px`, top: `${b.y - b.r}px`, width: `${b.r * 2}px`, height: `${b.r * 2}px` }); });
+    if (fsEl) css(fsEl, { left: `${L.aux.x}px`, top: `${L.aux.y}px`, width: `${L.aux.w}px`, height: `${L.aux.h}px` });
     if (menuEl) css(menuEl, { left: `${L.menu.x}px`, top: `${L.menu.y}px`, width: `${L.menu.w}px`, height: `${L.menu.h}px` });
     opts.onLayout?.(L, shown);
     return L;

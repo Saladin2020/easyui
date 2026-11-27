@@ -162,6 +162,11 @@ export function touchLayout({ w, h, safe = {}, game = { w: 480, h: 270 }, button
     const [sx, sy] = slots[i] ?? [-(i - 3) * 1.25 - 2.5, 0.2];
     out.push({ x: Math.round(cx + sx * unit), y: Math.round(cy + br * 0.6 + sy * unit), r: br });
   }
-  const menu = { x: w - S.right - pad - unit, y: S.top + pad, w: unit, h: Math.round(unit * 0.6) };
-  return { orientation, game: g, band, stick, buttons: out, menu, unit, safe: S };
+  // menu button top-right: in the band below the game (portrait), else in the screen's top-right corner
+  const mh = Math.round(unit * 0.6);
+  const roomy = orientation === "portrait" && band.y >= g.y + gh;
+  const menu = { x: w - S.right - pad - unit, y: roomy ? band.y + Math.round(pad / 2) : S.top + pad, w: unit, h: mh };
+  // one spare slot left of the menu button (e.g. a fullscreen toggle)
+  const aux = { x: menu.x - pad - mh, y: menu.y, w: mh, h: mh };
+  return { orientation, game: g, band, stick, buttons: out, menu, aux, unit, safe: S };
 }

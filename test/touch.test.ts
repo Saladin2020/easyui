@@ -131,6 +131,8 @@ describe("touchLayout", () => {
     expect(L.stick.y - L.stick.r).toBeGreaterThanOrEqual(L.game.y + L.game.h);
     for (const b of L.buttons) expect(b.y - b.r).toBeGreaterThanOrEqual(L.game.y + L.game.h);
     inside(L, 390, 844);
+    expect(L.menu.y).toBeGreaterThanOrEqual(L.game.y + L.game.h); // menu button does not cover the game
+    expect(L.aux.x + L.aux.w).toBeLessThanOrEqual(L.menu.x);
   });
   it("small portrait screens overlay the controls at the bottom", () => {
     const L = touchLayout({ w: 320, h: 300, buttons: 2 });
