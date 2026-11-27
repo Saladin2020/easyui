@@ -3,10 +3,12 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
+// node + the tsx CLI directly: spawning "npx" fails on Windows without a shell
+const TSX_CLI = `${process.cwd()}/node_modules/tsx/dist/cli.mjs`;
 
 const ws = mkdtempSync(path.join(os.tmpdir(), "easyui-cli-"));
-const cli = (...args) => execFileSync("npx", ["tsx", "src/cli.ts", ...args, "--workspace", ws], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
-const plain = (...args) => execFileSync("npx", ["tsx", "src/cli.ts", ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+const cli = (...args) => execFileSync(process.execPath, [TSX_CLI, "src/cli.ts", ...args, "--workspace", ws], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+const plain = (...args) => execFileSync(process.execPath, [TSX_CLI, "src/cli.ts", ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
 let failed = false;
 const ok = (cond, label) => {
   console.log(`${cond ? "ok  " : "FAIL"} ${label}`);
